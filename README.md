@@ -1,6 +1,7 @@
 # SyLog
 Go Logger package adopted Cloud Native principles in core.
 
+
 ## Usage Example
 Please see below for example code.
 

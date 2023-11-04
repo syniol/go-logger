@@ -48,7 +48,7 @@ func log(level logLevel, args []interface{}) *logger {
 		return &logger{
 			Level:     level,
 			Message:   "empty message",
-			Trace:     nil,
+			Trace:     []interface{}{},
 			Timestamp: time.Now().Format(time.RFC3339),
 		}
 	}
