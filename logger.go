@@ -43,12 +43,24 @@ type logger struct {
 	Timestamp string        `json:"timestamp"`
 }
 
+func logLocation() string {
+	_, fileName, fileLine, _ := runtime.Caller(2)
+
+	return fmt.Sprintf(
+		"location: file: '%s' on line: %d",
+		fileName,
+		fileLine,
+	)
+}
+
 func log(level logLevel, args []interface{}) *logger {
+	logLocationDetail := logLocation()
+
 	if len(args) == 0 {
 		return &logger{
 			Level:     level,
 			Message:   "empty message",
-			Trace:     []interface{}{},
+			Trace:     []interface{}{logLocationDetail},
 			Timestamp: time.Now().Format(time.RFC3339),
 		}
 	}
@@ -56,13 +68,7 @@ func log(level logLevel, args []interface{}) *logger {
 	var allArgs []interface{}
 	allArgs = append(allArgs, args...)
 
-	_, fileName, fileLine, _ := runtime.Caller(2)
-
-	allArgs = append(allArgs, fmt.Sprintf(
-		"location: file: '%s' on line: %d",
-		fileName,
-		fileLine,
-	))
+	allArgs = append(allArgs, logLocationDetail)
 
 	return &logger{
 		Level:   level,
