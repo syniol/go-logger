@@ -16,7 +16,7 @@ jobs:
         os: [ubuntu-latest]
     defaults:
       run:
-        working-directory: go/src/github.com/syniol/prison-break
+        working-directory: go/src/github.com/syniol/go-logger
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/setup-go@v3
@@ -24,7 +24,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - uses: actions/checkout@v3
         with:
-          path: 'go/src/github.com/syniol/prison-break'
+          path: 'go/src/github.com/syniol/go-logger'
       - name: Run Vet
         run: |
           go vet ./...
