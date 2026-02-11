@@ -1,4 +1,6 @@
 # SyLog
+![workflow](https://github.com/syniol/go-logger/actions/workflows/ci.yml/badge.svg)  
+
 Go Logger package adopted Cloud Native principles in core.
 
 
@@ -47,4 +49,4 @@ The following are the levels defined by Syslog in descending order of severity:
 
 
 #### Credits
-Copyright &copy; 2023 Syniol Limited. All rights Reserved.
+Copyright &copy; 2023-2026 Syniol Limited. All rights Reserved.
