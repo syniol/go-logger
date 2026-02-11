@@ -34,11 +34,11 @@ const (
 	levelError     logLevel = "error"
 	levelEmergency logLevel = "emergency"
 	levelCritical  logLevel = "crit"
-	levelFatal     logLevel = "fatal"
 )
 
 type logger struct {
 	Level     logLevel      `json:"level"`
+	Facility  string        `json:"facility"`
 	Message   string        `json:"message"`
 	Trace     []interface{} `json:"trace"`
 	Timestamp string        `json:"timestamp"`
@@ -47,22 +47,23 @@ type logger struct {
 func logLocation() string {
 	_, fileName, fileLine, ok := runtime.Caller(2)
 	if !ok {
-		return "file: path could not be found"
+		return "location: path could not be found"
 	}
 
 	return fmt.Sprintf(
-		"file: '%s' on line: %d",
+		"location: '%s' on line: %d",
 		fileName,
 		fileLine,
 	)
 }
 
-func log(level logLevel, args []interface{}) *logger {
+func log(level logLevel, facility string, args []interface{}) *logger {
 	logLocationDetail := logLocation()
 
 	if len(args) == 0 {
 		return &logger{
 			Level:     level,
+			Facility:  facility,
 			Message:   "",
 			Trace:     []interface{}{logLocationDetail},
 			Timestamp: time.Now().Format(time.RFC3339),
@@ -75,8 +76,9 @@ func log(level logLevel, args []interface{}) *logger {
 	allArgs = append(allArgs, logLocationDetail)
 
 	return &logger{
-		Level:   level,
-		Message: allArgs[0].(string),
+		Level:    level,
+		Facility: facility,
+		Message:  allArgs[0].(string),
 		Trace: func() []interface{} {
 			return allArgs[1:]
 		}(),
@@ -84,53 +86,48 @@ func log(level logLevel, args []interface{}) *logger {
 	}
 }
 
-func write(level logLevel, args []interface{}) {
-	logContents, _ := json.Marshal(log(level, args))
+func write(level logLevel, facility string, args []interface{}) {
+	logContents, _ := json.Marshal(log(level, facility, args))
 
 	println(string(logContents))
 }
 
 // LogInfo logs messages where in output JSON key "level" is "info"
-func LogInfo(args ...interface{}) {
-	write(levelInfo, args)
+func LogInfo(facility string, args ...interface{}) {
+	write(levelInfo, facility, args)
 }
 
 // LogDebug logs messages where in output JSON key "level" is "debug"
-func LogDebug(args ...interface{}) {
-	write(levelDebug, args)
+func LogDebug(facility string, args ...interface{}) {
+	write(levelDebug, facility, args)
 }
 
 // LogNotice logs messages where in output JSON key "level" is "notice"
-func LogNotice(args ...interface{}) {
-	write(levelNotice, args)
+func LogNotice(facility string, args ...interface{}) {
+	write(levelNotice, facility, args)
 }
 
 // LogWarning logs messages where in output JSON key "level" is "warn"
-func LogWarning(args ...interface{}) {
-	write(levelWarning, args)
+func LogWarning(facility string, args ...interface{}) {
+	write(levelWarning, facility, args)
 }
 
 // LogAlert logs messages where in output JSON key "level" is "alert"
-func LogAlert(args ...interface{}) {
-	write(levelAlert, args)
+func LogAlert(facility string, args ...interface{}) {
+	write(levelAlert, facility, args)
 }
 
 // LogEmergency logs messages where in output JSON key "level" is "emergency"
-func LogEmergency(args ...interface{}) {
-	write(levelEmergency, args)
+func LogEmergency(facility string, args ...interface{}) {
+	write(levelEmergency, facility, args)
 }
 
 // LogError logs messages where in output JSON key "level" is "error"
-func LogError(args ...interface{}) {
-	write(levelError, args)
+func LogError(facility string, args ...interface{}) {
+	write(levelError, facility, args)
 }
 
 // LogCritical logs messages where in output JSON key "level" is "crit"
-func LogCritical(args ...interface{}) {
-	write(levelCritical, args)
-}
-
-// LogFatal logs messages where in output JSON key "level" is "fatal"
-func LogFatal(args ...interface{}) {
-	write(levelFatal, args)
+func LogCritical(facility string, args ...interface{}) {
+	write(levelCritical, facility, args)
 }

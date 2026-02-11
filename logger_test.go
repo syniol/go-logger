@@ -5,34 +5,32 @@ import (
 )
 
 func TestLogWithEmptyArgument(t *testing.T) {
-	LogInfo()
-	LogEmergency()
-	LogCritical()
-	LogFatal()
-	LogError()
-	LogDebug()
-	LogAlert()
-	LogNotice()
+	LogInfo("PayNow Microservice")
+	LogEmergency("PayNow Microservice")
+	LogCritical("PayNow Microservice")
+	LogError("PayNow Microservice")
+	LogDebug("PayNow Microservice")
+	LogAlert("PayNow Microservice")
+	LogNotice("PayNow Microservice")
 }
 
 func TestLog(t *testing.T) {
-	LogInfo("SomeText", "lorem ipsum", struct {
+	LogInfo("PayNow Microservice", "SomeText", "lorem ipsum", struct {
 		Category string
 	}{
 		Category: "MyCategory",
 	}, 3232)
 
-	LogWarning("SomeText", "lorem ipsum", struct {
+	LogWarning("PayNow Microservice", "SomeText", "lorem ipsum", struct {
 		Category string
 	}{
 		Category: "MyCategory",
 	}, 3232)
 
-	LogEmergency("SomeText")
-	LogCritical("SomeText")
-	LogFatal("SomeText")
-	LogError("SomeText")
-	LogDebug("SomeText")
-	LogAlert("SomeText")
-	LogNotice("SomeText")
+	LogEmergency("PayNow Microservice", "SomeText")
+	LogCritical("PayNow Microservice", "SomeText")
+	LogError("PayNow Microservice", "SomeText")
+	LogDebug("PayNow Microservice", "SomeText")
+	LogAlert("PayNow Microservice", "SomeText")
+	LogNotice("PayNow Microservice", "SomeText")
 }
