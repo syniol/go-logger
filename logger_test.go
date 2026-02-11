@@ -4,17 +4,28 @@ import (
 	"testing"
 )
 
+func TestLogWithEmptyArgument(t *testing.T) {
+	LogInfo()
+	LogEmergency()
+	LogCritical()
+	LogFatal()
+	LogError()
+	LogDebug()
+	LogAlert()
+	LogNotice()
+}
+
 func TestLog(t *testing.T) {
 	LogInfo("SomeText", "lorem ipsum", struct {
 		Category string
 	}{
-		Category: "Categosdsds",
+		Category: "MyCategory",
 	}, 3232)
 
 	LogWarning("SomeText", "lorem ipsum", struct {
 		Category string
 	}{
-		Category: "Categosdsds",
+		Category: "MyCategory",
 	}, 3232)
 
 	LogEmergency("SomeText")
