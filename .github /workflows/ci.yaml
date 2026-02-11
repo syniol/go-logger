@@ -2,7 +2,7 @@ name: Code Standards, Unit Tests, Race Trace Detection
 
 on:
   push:
-    branches: [ "main", "release" ]
+    branches: [ "main" ]
 
   pull_request:
     branches: [ "main" ]
