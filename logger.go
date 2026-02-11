@@ -1,8 +1,9 @@
-// Use of this source code is governed by a zlib-style
+// Copyright 2023-2026 Syniol Limited. All rights reserved.
+// Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
+//
 // Package sylog provides a simple way to create a searchable logs for your logging needs
-
+//
 //	package main
 //
 //	import (
@@ -44,10 +45,13 @@ type logger struct {
 }
 
 func logLocation() string {
-	_, fileName, fileLine, _ := runtime.Caller(2)
+	_, fileName, fileLine, ok := runtime.Caller(2)
+	if !ok {
+		return "file: path could not be found"
+	}
 
 	return fmt.Sprintf(
-		"location: file: '%s' on line: %d",
+		"file: '%s' on line: %d",
 		fileName,
 		fileLine,
 	)
@@ -59,7 +63,7 @@ func log(level logLevel, args []interface{}) *logger {
 	if len(args) == 0 {
 		return &logger{
 			Level:     level,
-			Message:   "empty message",
+			Message:   "",
 			Trace:     []interface{}{logLocationDetail},
 			Timestamp: time.Now().Format(time.RFC3339),
 		}
