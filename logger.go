@@ -87,7 +87,21 @@ func log(level logLevel, facility string, args []interface{}) *logger {
 }
 
 func write(level logLevel, facility string, args []interface{}) {
-	logContents, _ := json.Marshal(log(level, facility, args))
+	logContents, err := json.Marshal(log(level, facility, args))
+	if err != nil {
+		println(`{"level":"` +
+			string(level) +
+			`", "facility":"` +
+			facility +
+			`", "message":"error creating a log - ` +
+			err.Error() +
+			`", "trace":[]` +
+			`, "timestamp":"` +
+			time.Now().Format(time.RFC3339) +
+			`" }`,
+		)
+		return
+	}
 
 	println(string(logContents))
 }
