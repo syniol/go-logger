@@ -183,4 +183,6 @@ When this reaches **CloudWatch** or **Datadog**, you can simply run a query like
 
 
 #### Credits
+Author: [Hadi Tajallaei](mailto:hadi@syniol.com)
+
 Copyright &copy; 2023-2026 Syniol Limited. All rights Reserved.
