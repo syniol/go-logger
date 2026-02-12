@@ -129,7 +129,7 @@ func write(level logLevel, facility string, args []string) {
 	buf.WriteString(loggerData.Message)
 	buf.WriteString(`","trace":[`)
 	for i, trace := range loggerData.Trace {
-		buf.WriteString(fmt.Sprintf(`"%+v"`, trace))
+		buf.WriteString(`"` + trace + `"`)
 		if i < len(loggerData.Trace)-1 {
 			buf.WriteString(`,`)
 		}
