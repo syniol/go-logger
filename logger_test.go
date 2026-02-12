@@ -3,6 +3,7 @@ package sylog
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 	"testing"
 	"time"
 )
@@ -42,6 +43,7 @@ func TestErrorMarshall(t *testing.T) {
 	level := levelCritical
 	facility := "unknown"
 	err := errors.New("JSON Marshall error")
+	timestamp := time.Now().Format(time.RFC3339)
 
 	errMessage := `{"level":"` +
 		string(level) +
@@ -49,9 +51,9 @@ func TestErrorMarshall(t *testing.T) {
 		facility +
 		`", "message":"error creating a log - ` +
 		err.Error() +
-		`", "trace":[]` +
+		`", "trace":["` + logLocation() + `"]` +
 		`, "timestamp":"` +
-		time.Now().Format(time.RFC3339) +
+		timestamp +
 		`" }`
 
 	var handMadeLog logger
@@ -61,6 +63,22 @@ func TestErrorMarshall(t *testing.T) {
 	}
 
 	if handMadeLog.Level != level {
-		t.Errorf("was expecting %s", handMadeLog.Level)
+		t.Errorf("was expecting %s", level)
+	}
+
+	if handMadeLog.Facility != facility {
+		t.Errorf("was expecting %s", facility)
+	}
+
+	if !strings.Contains(handMadeLog.Message, err.Error()) {
+		t.Errorf("was expecting error to contain %s", err.Error())
+	}
+
+	if handMadeLog.Timestamp != timestamp {
+		t.Errorf("was expecting %s", timestamp)
+	}
+
+	if len(handMadeLog.Trace) != 1 && !strings.Contains(handMadeLog.Trace[0].(string), "location: ") {
+		t.Errorf("was expecting 1 trace for file location")
 	}
 }

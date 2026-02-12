@@ -95,7 +95,7 @@ func write(level logLevel, facility string, args []interface{}) {
 			facility +
 			`", "message":"error creating a log - ` +
 			err.Error() +
-			`", "trace":[]` +
+			`", "trace":["` + logLocation() + `"]` +
 			`, "timestamp":"` +
 			time.Now().Format(time.RFC3339) +
 			`" }`,
