@@ -17,9 +17,12 @@
 package sylog
 
 import (
-	"encoding/json"
+	"bytes"
 	"fmt"
+	"io"
+	"os"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -86,24 +89,61 @@ func log(level logLevel, facility string, args []interface{}) *logger {
 	}
 }
 
-func write(level logLevel, facility string, args []interface{}) {
-	logContents, err := json.Marshal(log(level, facility, args))
-	if err != nil {
-		println(`{"level":"` +
-			string(level) +
-			`", "facility":"` +
-			facility +
-			`", "message":"error creating a log - ` +
-			err.Error() +
-			`", "trace":["` + logLocation() + `"]` +
-			`, "timestamp":"` +
-			time.Now().Format(time.RFC3339) +
-			`" }`,
-		)
-		return
-	}
+// bufferPool recycles *bytes.Buffer instances to minimize heap allocations.
+var bufferPool = sync.Pool{
+	New: func() interface{} {
+		// Pre-allocate 512 bytes to handle most log lines without re-allocating.
+		return bytes.NewBuffer(make([]byte, 0, 512))
+	},
+}
 
-	println(string(logContents))
+var writer io.Writer = os.Stdout
+
+// setOutput allows the user (or benchmark) to change where logs are sent.
+func setOutput(w io.Writer) {
+	writer = w
+}
+
+func write(level logLevel, facility string, args []interface{}) {
+	loggerData := log(level, facility, args)
+
+	// Snag a buffer from the pool (thread-safe).
+	buf := bufferPool.Get().(*bytes.Buffer)
+
+	// Ensure it's returned to the pool after the function exits.
+	defer func() {
+		// PRO TIP: If a log was massive (e.g. 1MB), don't put it back in the pool.
+		// This prevents "Memory Bloat" where the pool holds huge unused chunks.
+		if buf.Cap() <= 64*1024 { // 64KB Limit
+			buf.Reset()
+			bufferPool.Put(buf)
+		}
+	}()
+
+	// Build the JSON manually to avoid json.Marshal (Reflection = Slow).
+	buf.WriteString(`{"level":"`)
+	buf.WriteString(string(loggerData.Level))
+	buf.WriteString(`","facility":"`)
+	buf.WriteString(facility)
+	buf.WriteString(`","message":"`)
+	buf.WriteString(loggerData.Message)
+	buf.WriteString(`","trace":[`)
+	for i, trace := range loggerData.Trace {
+		buf.WriteString(fmt.Sprintf(`"%+v"`, trace))
+		if i < len(loggerData.Trace)-1 {
+			buf.WriteString(`,`)
+		}
+	}
+	buf.WriteString(`],"timestamp":"`)
+	buf.WriteString(loggerData.Timestamp)
+
+	buf.WriteString(`"}`)
+	buf.WriteByte('\n')
+
+	_, _ = io.Copy(writer, buf)
+
+	setOutput(writer)
+	_, _ = writer.Write(buf.Bytes())
 }
 
 // LogInfo logs messages where in output JSON key "level" is "info"

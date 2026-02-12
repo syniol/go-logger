@@ -9,7 +9,7 @@ import (
 )
 
 func TestLogWithEmptyArgument(t *testing.T) {
-	LogInfo("PayNow Microservice")
+	LogInfo("PayNow Microservice", "Mocked Message")
 	LogEmergency("PayNow Microservice")
 	LogCritical("PayNow Microservice")
 	LogError("PayNow Microservice")
