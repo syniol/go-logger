@@ -23,7 +23,7 @@ First you need to add and download SyLog dependency in your Go project.
 go get github.com/syniol/go-logger
 ```
 
-Please see below for example code.
+**Example code:**
 ```go
 package main
 
@@ -34,7 +34,7 @@ func main() {
 }
 ```
 
-Resulting Output:
+**Resulting Output:**
 ```json
 {
   "level": "alert",
@@ -46,6 +46,7 @@ Resulting Output:
   "timestamp": "2023-11-04T21:36:33Z"
 }
 ```
+
 
 ## Log Schema Definition
 Every log entry is emitted as a structured JSON object. This consistent schema ensures 
@@ -60,7 +61,7 @@ observability stacks.
 | `trace`     | `array`  | A collection of contextual metadata. The first element is automatically injected with the file path and line number of the caller. Subsequent elements contain any additional variadic arguments passed to the method. |
 | `timestamp` | `string` | The UTC time of event generation, formatted according to the **ISO 8601 / RFC 3339** standard for universal compatibility.                                                                                             |
 
-### A Design Note on the trace Array
+### A Design Note on the `trace` Array
 The trace field is designed for **maximum forensic utility**. By capturing the exact 
 line number where the log was triggered, it eliminates the guesswork during incident 
 response. Because it is an array, it keeps your top-level JSON namespace clean while 
@@ -98,7 +99,7 @@ sylog.LogAlert("vault-service", "Credential rotation failed - Unauthorised acces
 sylog.LogInfo("user-service", "User ID 505 logged in successfully")
 ```
 >**Architect's Tip:** In a production environment, you should typically set your log sink to ignore `LogDebug` and
-`LogInfo` to save on storage costs, while ensuring LogWarning and above are always captured.
+`LogInfo` to save on storage costs, while ensuring `LogWarning` and above are always captured.
 
 ### The Unopinionated Philosophy
 SyLog is designed to be a transparent sidecar to your application logic. Unlike other logging libraries that may
@@ -175,12 +176,6 @@ sylog.LogError("order-processor", "Database connection timed out")
 ```
 When this reaches **CloudWatch** or **Datadog**, you can simply run a query like facility: 
 "order-processor" to see the entire lifecycle of that specific service's behavior.
-
-### My Architectural Advice
-To make this even more powerful for your users, you might consider adding a **"Default Facility"** 
-option during the logger initialisation. This would allow a microservice to set its name once 
-(e.g., facility: "checkout-api") and then call LogInfo without passing the string every single 
-time, while still allowing manual overrides.
 
 
 #### Credits
