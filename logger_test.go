@@ -63,19 +63,19 @@ func TestErrorMarshall(t *testing.T) {
 	}
 
 	if handMadeLog.Level != level {
-		t.Errorf("was expecting %s", handMadeLog.Level)
+		t.Errorf("was expecting %s", level)
 	}
 
 	if handMadeLog.Facility != facility {
-		t.Errorf("was expecting %s", handMadeLog.Facility)
+		t.Errorf("was expecting %s", facility)
 	}
 
 	if !strings.Contains(handMadeLog.Message, err.Error()) {
-		t.Errorf("was expecting error to contain %s", handMadeLog.Message)
+		t.Errorf("was expecting error to contain %s", err.Error())
 	}
 
 	if handMadeLog.Timestamp != timestamp {
-		t.Errorf("was expecting %s", handMadeLog.Timestamp)
+		t.Errorf("was expecting %s", timestamp)
 	}
 
 	if len(handMadeLog.Trace) != 1 && !strings.Contains(handMadeLog.Trace[0].(string), "location: ") {
