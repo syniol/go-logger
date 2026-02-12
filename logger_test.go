@@ -1,7 +1,10 @@
 package sylog
 
 import (
+	"encoding/json"
+	"errors"
 	"testing"
+	"time"
 )
 
 func TestLogWithEmptyArgument(t *testing.T) {
@@ -33,4 +36,31 @@ func TestLog(t *testing.T) {
 	LogDebug("PayNow Microservice", "SomeText")
 	LogAlert("PayNow Microservice", "SomeText")
 	LogNotice("PayNow Microservice", "SomeText")
+}
+
+func TestErrorMarshall(t *testing.T) {
+	level := levelCritical
+	facility := "unknown"
+	err := errors.New("JSON Marshall error")
+
+	errMessage := `{"level":"` +
+		string(level) +
+		`", "facility":"` +
+		facility +
+		`", "message":"error creating a log - ` +
+		err.Error() +
+		`", "trace":[]` +
+		`, "timestamp":"` +
+		time.Now().Format(time.RFC3339) +
+		`" }`
+
+	var handMadeLog logger
+	marshallErr := json.Unmarshal([]byte(errMessage), &handMadeLog)
+	if marshallErr != nil {
+		t.Error(marshallErr)
+	}
+
+	if handMadeLog.Level != level {
+		t.Errorf("was expecting %s", handMadeLog.Level)
+	}
 }
