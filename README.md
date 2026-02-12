@@ -1,6 +1,10 @@
 # SyLog: Structured, Facility-Aware Logging for Go
 ![workflow](https://github.com/syniol/go-logger/actions/workflows/ci.yml/badge.svg)  
 
+<p align='center'>
+	<img style='max-width: 100%; width: 320px;' src='https://github.com/user-attachments/assets/865f2acc-30e0-4c5b-8ce6-069b3204b740' />
+</p>
+
 SyLog brings the battle-tested Facility and Severity methodology of Unix Syslog 
 to modern Go applications. It provides a structured, JSON-first logging interface 
 designed to give distributed systems the same level of granular categorisation 
