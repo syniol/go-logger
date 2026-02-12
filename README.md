@@ -1,4 +1,4 @@
-# SyLog (Go-Syslog): Structured, Facility-Aware Logging for Go
+# SyLog: Structured, Facility-Aware Logging for Go
 ![workflow](https://github.com/syniol/go-logger/actions/workflows/ci.yml/badge.svg)  
 
 SyLog brings the battle-tested Facility and Severity methodology of Unix Syslog 
