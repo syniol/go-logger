@@ -40,11 +40,11 @@ const (
 )
 
 type logger struct {
-	Level     logLevel      `json:"level"`
-	Facility  string        `json:"facility"`
-	Message   string        `json:"message"`
-	Trace     []interface{} `json:"trace"`
-	Timestamp string        `json:"timestamp"`
+	Level     logLevel `json:"level"`
+	Facility  string   `json:"facility"`
+	Message   string   `json:"message"`
+	Trace     []string `json:"trace"`
+	Timestamp string   `json:"timestamp"`
 }
 
 func logLocation() string {
@@ -60,7 +60,7 @@ func logLocation() string {
 	)
 }
 
-func log(level logLevel, facility string, args []interface{}) *logger {
+func log(level logLevel, facility string, args []string) *logger {
 	logLocationDetail := logLocation()
 
 	if len(args) == 0 {
@@ -68,12 +68,12 @@ func log(level logLevel, facility string, args []interface{}) *logger {
 			Level:     level,
 			Facility:  facility,
 			Message:   "",
-			Trace:     []interface{}{logLocationDetail},
+			Trace:     []string{logLocationDetail},
 			Timestamp: time.Now().Format(time.RFC3339),
 		}
 	}
 
-	var allArgs []interface{}
+	var allArgs []string
 	allArgs = append(allArgs, args...)
 
 	allArgs = append(allArgs, logLocationDetail)
@@ -81,8 +81,8 @@ func log(level logLevel, facility string, args []interface{}) *logger {
 	return &logger{
 		Level:    level,
 		Facility: facility,
-		Message:  allArgs[0].(string),
-		Trace: func() []interface{} {
+		Message:  allArgs[0],
+		Trace: func() []string {
 			return allArgs[1:]
 		}(),
 		Timestamp: time.Now().Format(time.RFC3339),
@@ -104,7 +104,7 @@ func setOutput(w io.Writer) {
 	writer = w
 }
 
-func write(level logLevel, facility string, args []interface{}) {
+func write(level logLevel, facility string, args []string) {
 	loggerData := log(level, facility, args)
 
 	// Snag a buffer from the pool (thread-safe).
@@ -147,41 +147,41 @@ func write(level logLevel, facility string, args []interface{}) {
 }
 
 // LogInfo logs messages where in output JSON key "level" is "info"
-func LogInfo(facility string, args ...interface{}) {
+func LogInfo(facility string, args ...string) {
 	write(levelInfo, facility, args)
 }
 
 // LogDebug logs messages where in output JSON key "level" is "debug"
-func LogDebug(facility string, args ...interface{}) {
+func LogDebug(facility string, args ...string) {
 	write(levelDebug, facility, args)
 }
 
 // LogNotice logs messages where in output JSON key "level" is "notice"
-func LogNotice(facility string, args ...interface{}) {
+func LogNotice(facility string, args ...string) {
 	write(levelNotice, facility, args)
 }
 
 // LogWarning logs messages where in output JSON key "level" is "warn"
-func LogWarning(facility string, args ...interface{}) {
+func LogWarning(facility string, args ...string) {
 	write(levelWarning, facility, args)
 }
 
 // LogAlert logs messages where in output JSON key "level" is "alert"
-func LogAlert(facility string, args ...interface{}) {
+func LogAlert(facility string, args ...string) {
 	write(levelAlert, facility, args)
 }
 
 // LogEmergency logs messages where in output JSON key "level" is "emergency"
-func LogEmergency(facility string, args ...interface{}) {
+func LogEmergency(facility string, args ...string) {
 	write(levelEmergency, facility, args)
 }
 
 // LogError logs messages where in output JSON key "level" is "error"
-func LogError(facility string, args ...interface{}) {
+func LogError(facility string, args ...string) {
 	write(levelError, facility, args)
 }
 
 // LogCritical logs messages where in output JSON key "level" is "crit"
-func LogCritical(facility string, args ...interface{}) {
+func LogCritical(facility string, args ...string) {
 	write(levelCritical, facility, args)
 }
