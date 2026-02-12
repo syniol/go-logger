@@ -18,10 +18,10 @@ package sylog
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"os"
 	"runtime"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -53,11 +53,7 @@ func logLocation() string {
 		return "location: path could not be found"
 	}
 
-	return fmt.Sprintf(
-		"location: '%s' on line: %d",
-		fileName,
-		fileLine,
-	)
+	return `location: '` + fileName + `' on line: ` + strconv.Itoa(fileLine) + ``
 }
 
 func log(level logLevel, facility string, args []string) *logger {
@@ -112,7 +108,7 @@ func write(level logLevel, facility string, args []string) {
 
 	// Ensure it's returned to the pool after the function exits.
 	defer func() {
-		// PRO TIP: If a log was massive (e.g. 1MB), don't put it back in the pool.
+		// If a log was massive (e.g. 1MB), don't put it back in the pool.
 		// This prevents "Memory Bloat" where the pool holds huge unused chunks.
 		if buf.Cap() <= 64*1024 { // 64KB Limit
 			buf.Reset()
