@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         # For Dev pipeline test on minimum and maximum version supported by package
-        go-version: [1.18.x, 1.25.0]
+        go-version: [1.21.x, 1.25.0]
         os: [ubuntu-latest]
     defaults:
       run:

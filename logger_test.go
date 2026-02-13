@@ -1,8 +1,22 @@
 package sylog
 
 import (
+	"bytes"
+	"strings"
 	"testing"
 )
+
+func TestLogInfo(t *testing.T) {
+	var buf bytes.Buffer
+	SetOutput(&buf)
+
+	LogInfo("test message")
+
+	output := buf.String()
+	if !strings.Contains(output, "test message") {
+		t.Errorf("Expected log to contain 'test message', got: %s", output)
+	}
+}
 
 func TestLogWithEmptyArgument(t *testing.T) {
 	LogInfo("PayNow Microservice", "Mocked Message")

@@ -95,8 +95,8 @@ var bufferPool = sync.Pool{
 
 var writer io.Writer = os.Stdout
 
-// setOutput allows the user (or benchmark) to change where logs are sent.
-func setOutput(w io.Writer) {
+// SetOutput allows the user (or benchmark) to change where logs are sent.
+func SetOutput(w io.Writer) {
 	writer = w
 }
 
@@ -137,8 +137,6 @@ func write(level logLevel, facility string, args []string) {
 	buf.WriteByte('\n')
 
 	_, _ = io.Copy(writer, buf)
-
-	setOutput(writer)
 	_, _ = writer.Write(buf.Bytes())
 }
 
