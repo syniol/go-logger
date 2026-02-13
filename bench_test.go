@@ -1,4 +1,4 @@
-package logger_test
+package sylog_test
 
 import (
 	"io"
@@ -17,7 +17,7 @@ func BenchmarkSyniolLogger(b *testing.B) {
 	b.ReportAllocs() // This is critical for the "Top 1%" look
 
 	for i := 0; i < b.N; i++ {
-		sylog.LogInfo("pay-microservice", "transaction processed", "id", 12345)
+		sylog.LogInfo("pay-microservice", "transaction processed", "id", "12345")
 	}
 }
 
@@ -30,7 +30,7 @@ func BenchmarkSlogJSON(b *testing.B) {
 	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
-		l.Info("transaction processed", "facility", "pay-microservice", "id", 12345)
+		l.Info("transaction processed", "facility", "pay-microservice", "id", "12345")
 	}
 }
 
@@ -45,6 +45,6 @@ func BenchmarkSlogWithSource(b *testing.B) {
 	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
-		l.Info("transaction processed", "facility", "pay-microservice", "id", 12345)
+		l.Info("transaction processed", "facility", "pay-microservice", "id", "12345")
 	}
 }
