@@ -35,7 +35,7 @@ func BenchmarkSlogJSON(b *testing.B) {
 }
 
 // BenchmarkSlogWithSource measures slog with source-code tracing enabled.
-// This is the most "apples-to-apples" comparison for your logger's trace feature.
+// This is the most "apples-to-apples" comparison for sylog's trace feature.
 func BenchmarkSlogWithSource(b *testing.B) {
 	opts := &slog.HandlerOptions{AddSource: true}
 	handler := slog.NewJSONHandler(io.Discard, opts)
