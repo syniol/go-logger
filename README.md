@@ -181,6 +181,17 @@ sylog.LogError("order-processor", "Database connection timed out")
 When this reaches **CloudWatch** or **Datadog**, you can simply run a query like facility: 
 "order-processor" to see the entire lifecycle of that specific service's behavior.
 
+## Performance Benchmarks
+The document that tracks the performance of the logger package is published in details 
+at the root of repository [`BENCHMARKS.md`](https://github.com/syniol/go-logger/blob/main/BENCHMARKS.md).
+
+
+| Benchmark Case            | Iterations | Memory Allocations | Bytes Allocations | Operation Allocations |
+|---------------------------|------------|--------------------|-------------------|-----------------------|
+| BenchmarkSyniolLogger-8   | 	 1891555	 | 611.1 ns/op	       | 664 B/op	         | 9 allocs/op           |
+| BenchmarkSlogJSON-8       | 	 2352092	 | 510.8 ns/op	       | 0 B/op	           | 0 allocs/op           |
+| BenchmarkSlogWithSource-8 | 	 1000000	 | 1053 ns/op	        | 584 B/op	         | 6 allocs/op           |
+
 
 #### Credits
 Author: [Hadi Tajallaei](mailto:hadi@syniol.com)
