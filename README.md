@@ -132,6 +132,12 @@ if err != nil {
 }
 ```
 
+#### Zero-Loss Fatal Errors
+Our LogFatal implementation uses Type Assertion to detect if the underlying `io.Writer` supports
+synchronisation (like `*os.File`). This ensures that during a catastrophic failure, your logs are
+flushed to the disk before the process terminates, preventing "ghost crashes" where the cause of
+death is lost in a buffered stream.
+
 
 ## Core Concepts: The Power of "Facility"
 In systems architecture, clarity is the antidote to complexity. When adapting the Syslog
@@ -181,16 +187,22 @@ sylog.LogError("order-processor", "Database connection timed out")
 When this reaches **CloudWatch** or **Datadog**, you can simply run a query like facility: 
 "order-processor" to see the entire lifecycle of that specific service's behavior.
 
-## Performance Benchmarks
+
+## Performance and Benchmarks
 The document that tracks the performance of the logger package is published in details 
 at the root of repository [`BENCHMARKS.md`](https://github.com/syniol/go-logger/blob/main/BENCHMARKS.md).
 
-
-| Benchmark Case            | Iterations | Memory Allocations | Bytes Allocations | Operation Allocations |
-|---------------------------|------------|--------------------|-------------------|-----------------------|
-| BenchmarkSyniolLogger-8   | 	 1891555	 | 611.1 ns/op	       | 664 B/op	         | 9 allocs/op           |
-| BenchmarkSlogJSON-8       | 	 2352092	 | 510.8 ns/op	       | 0 B/op	           | 0 allocs/op           |
-| BenchmarkSlogWithSource-8 | 	 1000000	 | 1053 ns/op	        | 584 B/op	         | 6 allocs/op           |
+| Benchmark Case          | Iterations | Memory Allocations   | Bytes Allocations | Operation Allocations |
+|-------------------------|------------|----------------------|-------------------|-----------------------|
+| BenchmarkSyniolLogger   | 	 2792167  | 	       407.3 ns/op	 | 336 B/op	         | 6 allocs/op           |
+| BenchmarkSyniolLogger   | 	 2944899	 | 408.6 ns/op	         | 336 B/op	         | 6 allocs/op           |
+| BenchmarkSyniolLogger   | 	 2927808	 | 409.0 ns/op	         | 336 B/op	         | 6 allocs/op           |
+| BenchmarkSlogJSON       | 	 2355129	 | 508.6 ns/op	         | 0 B/op	           | 0 allocs/op           |
+| BenchmarkSlogJSON       | 	 2355932	 | 513.1 ns/op	         | 0 B/op	           | 0 allocs/op           |
+| BenchmarkSlogJSON       | 	 2373483	 | 511.4 ns/op	         | 0 B/op	           | 0 allocs/op           |
+| BenchmarkSlogWithSource | 	 1000000	 | 1056 ns/op	          | 584 B/op	         | 6 allocs/op           |
+| BenchmarkSlogWithSource | 	 1000000	 | 1044 ns/op	          | 584 B/op	         | 6 allocs/op           |
+| BenchmarkSlogWithSource | 	 1000000	 | 1044 ns/op	          | 584 B/op	         | 6 allocs/op           |
 
 
 #### Credits
