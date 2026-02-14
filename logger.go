@@ -39,12 +39,19 @@ const (
 	levelCritical  logLevel = "crit"
 )
 
+type LoggerOptions struct {
+	Facility string
+	Writer   io.Writer
+}
+
 type logger struct {
 	Level     logLevel `json:"level"`
 	Facility  string   `json:"facility"`
 	Message   string   `json:"message"`
 	Trace     []string `json:"trace"`
 	Timestamp string   `json:"timestamp"`
+
+	loggerOptions *LoggerOptions
 }
 
 // locCache prevents us from calling the expensive runtime.CallersFrames repeatedly

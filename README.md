@@ -187,6 +187,20 @@ sylog.LogError("order-processor", "Database connection timed out")
 When this reaches **CloudWatch** or **Datadog**, you can simply run a query like facility: 
 "order-processor" to see the entire lifecycle of that specific service's behavior.
 
+### Encapsulating Facility
+**Example code:**
+```go
+package main
+
+import "github.com/syniol/go-logger"
+
+func main() {
+	logger := sylog.New("pay microservice")
+
+	logger.LogInfo("mock message for alert log")
+	logger.LogWarning("mock warning message for alert log")
+}
+```
 
 ## Performance and Benchmarks
 The document that tracks the performance of the logger package is published in details 
