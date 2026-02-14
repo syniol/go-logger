@@ -52,7 +52,8 @@ var locCache sync.Map
 
 func logLocation() string {
 	// Get the Program Counter (PC) only.
-	// runtime.Callers method is faster than runtime.Caller because it doesn't resolve symbols.
+	// runtime.Callers method is faster than runtime.Caller because
+	// according to Go release docs it doesn't resolve symbols
 	var pcs [1]uintptr
 	n := runtime.Callers(2, pcs[:])
 	if n == 0 {
@@ -60,16 +61,16 @@ func logLocation() string {
 	}
 	pc := pcs[0]
 
-	// Fast Path: Check the cache
+	// Fast Path Checking: Checks the cache for path
 	if val, ok := locCache.Load(pc); ok {
 		return val.(string)
 	}
 
-	// 3. Slow Path: Resolve symbols only once per call-site
+	// Slow Path: Resolve symbols only once per call-site
 	frames := runtime.CallersFrames(pcs[:n])
 	frame, _ := frames.Next()
 
-	// Format the string once (e.g., "location: main.go:42")
+	// Format the string once (e.g., "location: 'main.go:42'")
 	locStr := `location: '` + frame.File + `:` + strconv.Itoa(frame.Line) + `'`
 
 	// Store in cache for future hits at this exact code line
