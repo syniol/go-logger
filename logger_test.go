@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestLogInfo(t *testing.T) {
+func TestLoggedMessage(t *testing.T) {
 	var buf bytes.Buffer
 	SetOutput(&buf)
 
@@ -18,7 +18,7 @@ func TestLogInfo(t *testing.T) {
 	}
 }
 
-func TestLogWithEmptyArgument(t *testing.T) {
+func TestLogWithEmptyArgumentExecution(t *testing.T) {
 	LogInfo("PayNow Microservice", "Mocked Message")
 	LogEmergency("PayNow Microservice")
 	LogCritical("PayNow Microservice")
@@ -28,7 +28,7 @@ func TestLogWithEmptyArgument(t *testing.T) {
 	LogNotice("PayNow Microservice")
 }
 
-func TestLog(t *testing.T) {
+func TestLogExecution(t *testing.T) {
 	LogInfo("PayNow Microservice", "SomeText", "lorem ipsum", " 3232")
 
 	LogWarning("PayNow Microservice", "SomeText", "lorem ipsum", "3232")

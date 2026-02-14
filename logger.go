@@ -47,13 +47,35 @@ type logger struct {
 	Timestamp string   `json:"timestamp"`
 }
 
+// locCache prevents us from calling the expensive runtime.CallersFrames repeatedly
+var locCache sync.Map
+
 func logLocation() string {
-	_, fileName, fileLine, ok := runtime.Caller(2)
-	if !ok {
-		return "location: path could not be found"
+	// Get the Program Counter (PC) only.
+	// runtime.Callers method is faster than runtime.Caller because it doesn't resolve symbols.
+	var pcs [1]uintptr
+	n := runtime.Callers(2, pcs[:])
+	if n == 0 {
+		return "unknown:0"
+	}
+	pc := pcs[0]
+
+	// Fast Path: Check the cache
+	if val, ok := locCache.Load(pc); ok {
+		return val.(string)
 	}
 
-	return `location: '` + fileName + `' on line: ` + strconv.Itoa(fileLine) + ``
+	// 3. Slow Path: Resolve symbols only once per call-site
+	frames := runtime.CallersFrames(pcs[:n])
+	frame, _ := frames.Next()
+
+	// Format the string once (e.g., "location: main.go:42")
+	locStr := `location: '` + frame.File + `:` + strconv.Itoa(frame.Line) + `'`
+
+	// Store in cache for future hits at this exact code line
+	locCache.Store(pc, locStr)
+
+	return locStr
 }
 
 func log(level logLevel, facility string, args []string) *logger {
