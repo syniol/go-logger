@@ -1,11 +1,25 @@
 package sylog
 
 import (
+	"bytes"
+	"strings"
 	"testing"
 )
 
-func TestLogWithEmptyArgument(t *testing.T) {
-	LogInfo("PayNow Microservice")
+func TestLoggedMessage(t *testing.T) {
+	var buf bytes.Buffer
+	SetOutput(&buf)
+
+	LogInfo("test message")
+
+	output := buf.String()
+	if !strings.Contains(output, "test message") {
+		t.Errorf("Expected log to contain 'test message', got: %s", output)
+	}
+}
+
+func TestLogWithEmptyArgumentExecution(t *testing.T) {
+	LogInfo("PayNow Microservice", "Mocked Message")
 	LogEmergency("PayNow Microservice")
 	LogCritical("PayNow Microservice")
 	LogError("PayNow Microservice")
@@ -14,18 +28,10 @@ func TestLogWithEmptyArgument(t *testing.T) {
 	LogNotice("PayNow Microservice")
 }
 
-func TestLog(t *testing.T) {
-	LogInfo("PayNow Microservice", "SomeText", "lorem ipsum", struct {
-		Category string
-	}{
-		Category: "MyCategory",
-	}, 3232)
+func TestLogExecution(t *testing.T) {
+	LogInfo("PayNow Microservice", "SomeText", "lorem ipsum", " 3232")
 
-	LogWarning("PayNow Microservice", "SomeText", "lorem ipsum", struct {
-		Category string
-	}{
-		Category: "MyCategory",
-	}, 3232)
+	LogWarning("PayNow Microservice", "SomeText", "lorem ipsum", "3232")
 
 	LogEmergency("PayNow Microservice", "SomeText")
 	LogCritical("PayNow Microservice", "SomeText")
