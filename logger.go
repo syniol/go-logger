@@ -29,15 +29,26 @@ import (
 type logLevel string
 
 const (
+	levelEmergency logLevel = "emergency"
+	levelAlert     logLevel = "alert"
+	levelCritical  logLevel = "crit"
+	levelError     logLevel = "error"
+	levelWarning   logLevel = "warn"
+	levelNotice    logLevel = "notice"
 	levelInfo      logLevel = "info"
 	levelDebug     logLevel = "debug"
-	levelNotice    logLevel = "notice"
-	levelWarning   logLevel = "warn"
-	levelAlert     logLevel = "alert"
-	levelError     logLevel = "error"
-	levelEmergency logLevel = "emergency"
-	levelCritical  logLevel = "crit"
 )
+
+var levelCode = map[logLevel]int{
+	levelEmergency: 0,
+	levelAlert:     1,
+	levelCritical:  2,
+	levelError:     3,
+	levelWarning:   4,
+	levelNotice:    5,
+	levelInfo:      6,
+	levelDebug:     7,
+}
 
 type logger struct {
 	Level     logLevel `json:"level"`
@@ -142,6 +153,8 @@ func write(level logLevel, facility string, args []string) {
 	// Build the JSON manually to avoid json.Marshal (Reflection = Slow).
 	buf.WriteString(`{"level":"`)
 	buf.WriteString(string(loggerData.Level))
+	buf.WriteString(`","code":"`)
+	buf.WriteString(strconv.Itoa(levelCode[level]))
 	buf.WriteString(`","facility":"`)
 	buf.WriteString(facility)
 	buf.WriteString(`","message":"`)
