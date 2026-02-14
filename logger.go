@@ -39,7 +39,10 @@ const (
 	levelCritical  logLevel = "crit"
 )
 
-type LoggerOptions struct{}
+type LoggerOptions struct {
+	Facility string
+	Writer   io.Writer
+}
 
 type logger struct {
 	Level     logLevel `json:"level"`

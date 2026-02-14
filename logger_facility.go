@@ -11,7 +11,7 @@ type Logger interface {
 	LogCritical(args ...string)
 }
 
-func New(facility string, opt *LoggerOptions) Logger {
+func NewLogger(facility string, opt *LoggerOptions) Logger {
 	return &logger{
 		Facility:      facility,
 		loggerOptions: opt,
