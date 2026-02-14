@@ -192,19 +192,17 @@ When this reaches **CloudWatch** or **Datadog**, you can simply run a query like
 The document that tracks the performance of the logger package is published in details 
 at the root of repository [`BENCHMARKS.md`](https://github.com/syniol/go-logger/blob/main/BENCHMARKS.md).
 
-| Benchmark Case            | Iterations | Memory Allocations   | Bytes Allocations | Operation Allocations |
-|---------------------------|------------|----------------------|-------------------|-----------------------|
-| BenchmarkSyniolLogger-8   | 	 2792167  | 	       407.3 ns/op	 | 336 B/op	         | 6 allocs/op           |
-| BenchmarkSyniolLogger-8   | 	 2944899	 | 408.6 ns/op	         | 336 B/op	         | 6 allocs/op           |
-| BenchmarkSyniolLogger-8   | 	 2927808	 | 409.0 ns/op	         | 336 B/op	         | 6 allocs/op           |
-| BenchmarkSlogJSON-8       | 	 2355129	 | 508.6 ns/op	         | 0 B/op	           | 0 allocs/op           |
-| BenchmarkSlogJSON-8       | 	 2355932	 | 513.1 ns/op	         | 0 B/op	           | 0 allocs/op           |
-| BenchmarkSlogJSON-8       | 	 2373483	 | 511.4 ns/op	         | 0 B/op	           | 0 allocs/op           |
-| BenchmarkSlogWithSource-8 | 	 1000000	 | 1056 ns/op	          | 584 B/op	         | 6 allocs/op           |
-| BenchmarkSlogWithSource-8 | 	 1000000	 | 1044 ns/op	          | 584 B/op	         | 6 allocs/op           |
-| BenchmarkSlogWithSource-8 | 	 1000000	 | 1044 ns/op	          | 584 B/op	         | 6 allocs/op           |
-
-
+| Benchmark Case          | Iterations | Memory Allocations   | Bytes Allocations | Operation Allocations |
+|-------------------------|------------|----------------------|-------------------|-----------------------|
+| BenchmarkSyniolLogger   | 	 2792167  | 	       407.3 ns/op	 | 336 B/op	         | 6 allocs/op           |
+| BenchmarkSyniolLogger   | 	 2944899	 | 408.6 ns/op	         | 336 B/op	         | 6 allocs/op           |
+| BenchmarkSyniolLogger   | 	 2927808	 | 409.0 ns/op	         | 336 B/op	         | 6 allocs/op           |
+| BenchmarkSlogJSON       | 	 2355129	 | 508.6 ns/op	         | 0 B/op	           | 0 allocs/op           |
+| BenchmarkSlogJSON       | 	 2355932	 | 513.1 ns/op	         | 0 B/op	           | 0 allocs/op           |
+| BenchmarkSlogJSON       | 	 2373483	 | 511.4 ns/op	         | 0 B/op	           | 0 allocs/op           |
+| BenchmarkSlogWithSource | 	 1000000	 | 1056 ns/op	          | 584 B/op	         | 6 allocs/op           |
+| BenchmarkSlogWithSource | 	 1000000	 | 1044 ns/op	          | 584 B/op	         | 6 allocs/op           |
+| BenchmarkSlogWithSource | 	 1000000	 | 1044 ns/op	          | 584 B/op	         | 6 allocs/op           |
 
 
 #### Credits
